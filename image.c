@@ -1,13 +1,13 @@
 #include <atlimage.h>
 
 /*
-input: 
+[input]
 Image: source image,
 szNew: size of new image, 
 nRotate: 0=no rotate, 1=rotate 90 left, 2=rotate 90 right, 3=rotate 180 upside down
 nFlip: 0=no flip, 1=horizontal, 2=vertical
 bNegative: true=film like negative image
-return:
+[return]
 pointer to new cimage
 */
 CImage* EditImage(CImage& Image, CSize szNew, int nRotate, int nFlip, bool bNegative){
@@ -77,10 +77,10 @@ CImage* EditImage(CImage& Image, CSize szNew, int nRotate, int nFlip, bool bNega
 }
 
 void Test(){
-  CImage image;
-  image.Load(L"myimage.png");
-  CImage pNewImage=EditImage(image,CSize(800,600),3,0,false);
-  pNewImage->Save(L"newimage.jpg",Gdiplus::ImageFormatJPEG);  //Gdiplus::ImageFormatPNG Gdiplus::ImageFormatBMP...JPEG GIF
-  pNewImage->Destroy();
-  delete pNewImage;
+  	CImage image;
+  	image.Load(L"myimage.png");
+  	CImage* pNewImage=EditImage(image,CSize(800,600),3,0,false);
+  	pNewImage->Save(L"newimage.jpg",Gdiplus::ImageFormatJPEG);  //Gdiplus::ImageFormatPNG Gdiplus::ImageFormatBMP...JPEG GIF
+  	pNewImage->Destroy();
+  	delete pNewImage;
 }
