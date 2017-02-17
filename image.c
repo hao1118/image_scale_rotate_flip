@@ -27,9 +27,7 @@ CImage* EditImage(CImage& Image, CSize szNew, int nRotate, int nFlip, bool bNega
 	CImage* pImage = new CImage;
 	pImage->Create(szNew.cx, szNew.cy, 24);
 
-	int nStride = Image.GetWidth() * 3;
-	for (int y = 0; y < szNew.cy; y++){
-		byte* line = (byte*)pImage->GetPixelAddress(0, y);		
+	for (int y = 0; y < szNew.cy; y++){		
 		int y0 = y;
 		if (nFlip == 2)
 			y0 = szNew.cy - y - 1;
@@ -55,22 +53,24 @@ CImage* EditImage(CImage& Image, CSize szNew, int nRotate, int nFlip, bool bNega
 				else if (nFlip == 2)
 					y1 = y;
 			}
+			
 			//get the source image's pixel value
 			int xs = x1 / fX;
 			int ys = y1 / fY;
 			byte *ps = (byte*)Image.GetPixelAddress(xs, ys);
-			byte *p = line + x * 3;
+			
 			//nearest neighbour, or biliner for better result
-			*p = *ps;
-			*(p + 1) = *(ps + 1);
-			*(p + 2) = *(ps + 2);
-		}
-	}
-	if (bNegative){
-		for (int i = 0; i < szNew.cy; i++){
-			byte* pColors = (byte*)pImage->GetPixelAddress(0, i);
-			for (int n = 0; n < szNew.cx * 3; n++)
-				pColors[n] = 255 - pColors[n];
+			byte *p = (byte*)pImage->GetPixelAddress(x, y);
+			if (bNegative){
+				*p = 255 - *ps;
+				*(p + 1) = 255 - *(ps + 1);
+				*(p + 2) = 255 - *(ps + 2);
+			}
+			else{
+				*p = *ps;
+				*(p + 1) = *(ps + 1);
+				*(p + 2) = *(ps + 2);
+			}
 		}
 	}
 	return pImage;
